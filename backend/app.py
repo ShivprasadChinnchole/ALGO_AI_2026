@@ -225,6 +225,8 @@ def add_demo_vote():
         timestamp = data.get('timestamp')
         
         if timestamp:
+            # Handle both Zulu time notation (Z) and explicit UTC offset formats
+            # Replace 'Z' with '+00:00' for ISO format compatibility
             vote_time = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
         else:
             vote_time = datetime.now()

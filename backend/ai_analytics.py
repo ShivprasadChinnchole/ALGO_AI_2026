@@ -96,13 +96,16 @@ def detect_vote_burst(vote_timestamps: List[Union[datetime, int, float]]) -> Dic
         max_burst_count = 0
         time_window_seconds = 30
         
-        # Sliding window approach to detect bursts
-        for i in range(len(timestamps)):
-            # Define the window end time
-            window_end = timestamps[i] + timedelta(seconds=time_window_seconds)
+        # Optimized sliding window approach using two pointers (O(n) complexity)
+        # This is more efficient than nested loops for large datasets
+        left = 0
+        for right in range(len(timestamps)):
+            # Move left pointer forward while window exceeds 30 seconds
+            while left < right and (timestamps[right] - timestamps[left]).total_seconds() > time_window_seconds:
+                left += 1
             
-            # Count votes within this window
-            votes_in_window = sum(1 for ts in timestamps if timestamps[i] <= ts <= window_end)
+            # Count votes in current window
+            votes_in_window = right - left + 1
             
             # Update max burst count
             if votes_in_window > max_burst_count:
