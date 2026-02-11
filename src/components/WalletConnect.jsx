@@ -10,25 +10,6 @@ const WalletConnect = ({ onWalletChange }) => {
   const [accountAddress, setAccountAddress] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
 
-  // Initialize wallet connection on component mount
-  useEffect(() => {
-    // Reconnect to session if exists
-    peraWallet.reconnectSession().then((accounts) => {
-      if (accounts.length) {
-        setAccountAddress(accounts[0]);
-        onWalletChange && onWalletChange(accounts[0]);
-      }
-    });
-
-    // Listen for wallet disconnection
-    peraWallet.connector?.on('disconnect', handleDisconnect);
-
-    return () => {
-      peraWallet.connector?.off('disconnect', handleDisconnect);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [peraWallet]);
-
   /**
    * Connect to Pera Wallet
    */
@@ -69,11 +50,29 @@ const WalletConnect = ({ onWalletChange }) => {
   /**
    * Disconnect from Pera Wallet
    */
-  const handleDisconnect = () => {
+  const handleDisconnect = React.useCallback(() => {
     peraWallet.disconnect();
     setAccountAddress(null);
     onWalletChange && onWalletChange(null);
-  };
+  }, [peraWallet, onWalletChange]);
+
+  // Initialize wallet connection on component mount
+  useEffect(() => {
+    // Reconnect to session if exists
+    peraWallet.reconnectSession().then((accounts) => {
+      if (accounts.length) {
+        setAccountAddress(accounts[0]);
+        onWalletChange && onWalletChange(accounts[0]);
+      }
+    });
+
+    // Listen for wallet disconnection
+    peraWallet.connector?.on('disconnect', handleDisconnect);
+
+    return () => {
+      peraWallet.connector?.off('disconnect', handleDisconnect);
+    };
+  }, [peraWallet, onWalletChange, handleDisconnect]);
 
   /**
    * Format wallet address for display (show first 6 and last 4 characters)

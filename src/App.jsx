@@ -15,8 +15,10 @@ function App() {
   const [walletAddress, setWalletAddress] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
 
-  // App ID for Algorand smart contract (placeholder - replace with actual App ID)
-  const APP_ID = '123456789';
+  // App ID for Algorand smart contract
+  // TODO: Replace this placeholder with your actual Algorand Application ID
+  // You can also use an environment variable: process.env.REACT_APP_ALGORAND_APP_ID
+  const APP_ID = process.env.REACT_APP_ALGORAND_APP_ID || '123456789';
 
   /**
    * Handle wallet connection state changes

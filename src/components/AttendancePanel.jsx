@@ -12,19 +12,11 @@ const AttendancePanel = ({ walletAddress }) => {
   const [attendanceStatus, setAttendanceStatus] = useState(null);
 
   /**
-   * Fetch attendance status on component mount
-   */
-  useEffect(() => {
-    if (walletAddress) {
-      fetchAttendanceStatus();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walletAddress]);
-
-  /**
    * Fetch attendance status from backend
    */
-  const fetchAttendanceStatus = async () => {
+  const fetchAttendanceStatus = React.useCallback(async () => {
+    if (!walletAddress) return;
+    
     try {
       const response = await fetch(`/api/attendance?walletAddress=${walletAddress}`);
       
@@ -36,7 +28,14 @@ const AttendancePanel = ({ walletAddress }) => {
     } catch (error) {
       console.error('Error fetching attendance status:', error);
     }
-  };
+  }, [walletAddress]);
+
+  /**
+   * Fetch attendance status on component mount
+   */
+  useEffect(() => {
+    fetchAttendanceStatus();
+  }, [fetchAttendanceStatus]);
 
   /**
    * Handle marking attendance

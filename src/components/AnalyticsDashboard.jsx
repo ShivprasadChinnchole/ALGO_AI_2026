@@ -24,41 +24,9 @@ const AnalyticsDashboard = ({ walletAddress }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   /**
-   * Fetch analytics data on component mount
-   */
-  useEffect(() => {
-    fetchAnalytics();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
-   * Fetch analytics from backend
-   */
-  const fetchAnalytics = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/analytics');
-      
-      if (response.ok) {
-        const data = await response.json();
-        setAnalytics(data);
-      } else {
-        // Use mock data if backend is not available
-        setAnalytics(getMockAnalytics());
-      }
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      // Use mock data on error
-      setAnalytics(getMockAnalytics());
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  /**
    * Mock analytics data for demonstration
    */
-  const getMockAnalytics = () => ({
+  const getMockAnalytics = React.useCallback(() => ({
     overview: {
       totalProposals: 24,
       totalVotes: 156,
@@ -105,7 +73,38 @@ const AnalyticsDashboard = ({ walletAddress }) => {
       'Voter participation likely to increase by 15%',
       'Attendance rate projected to stabilize at 80%',
     ],
-  });
+  }), []);
+
+  /**
+   * Fetch analytics from backend
+   */
+  const fetchAnalytics = React.useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/analytics');
+      
+      if (response.ok) {
+        const data = await response.json();
+        setAnalytics(data);
+      } else {
+        // Use mock data if backend is not available
+        setAnalytics(getMockAnalytics());
+      }
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+      // Use mock data on error
+      setAnalytics(getMockAnalytics());
+    } finally {
+      setIsLoading(false);
+    }
+  }, [getMockAnalytics]);
+
+  /**
+   * Fetch analytics data on component mount
+   */
+  useEffect(() => {
+    fetchAnalytics();
+  }, [fetchAnalytics]);
 
   if (isLoading) {
     return (
