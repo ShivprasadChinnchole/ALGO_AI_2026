@@ -275,6 +275,24 @@ def check_anomalies():
     return jsonify(result)
 ```
 
+### Running the Flask Server
+
+```bash
+# Development mode (with debugging)
+export FLASK_DEBUG=true
+python backend/app.py
+
+# Production mode (recommended - no debugging)
+# Debug mode disabled by default for security
+python backend/app.py
+
+# Or explicitly set debug to false
+export FLASK_DEBUG=false
+python backend/app.py
+```
+
+**Security Note**: NEVER run Flask with debug mode enabled in production environments. The debugger allows arbitrary code execution and poses a serious security risk. Debug mode is controlled via the `FLASK_DEBUG` environment variable and defaults to `False` for security.
+
 ## Error Handling
 
 All functions include comprehensive error handling and will return safe default values if errors occur:

@@ -352,5 +352,13 @@ if __name__ == '__main__':
     print("  POST /api/demo/add-proposal         - Add a sample proposal")
     print("  POST /api/demo/reset                - Reset demo data")
     print("\n" + "=" * 60)
+    print("\nNOTE: For production deployment, set debug=False")
+    print("=" * 60)
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # SECURITY: Debug mode should NEVER be enabled in production
+    # Set to False for production deployments
+    # Only use debug=True in local development environments
+    import os
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    
+    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
