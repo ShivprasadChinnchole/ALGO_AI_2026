@@ -1,0 +1,5 @@
+# AI Analytics Module Dependencies
+textblob>=0.15.3
+
+# For downloading TextBlob corpora (run after install):
+# python -m textblob.download_corpora
