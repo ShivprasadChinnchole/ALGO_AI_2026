@@ -26,7 +26,8 @@ const WalletConnect = ({ onWalletChange }) => {
     return () => {
       peraWallet.connector?.off('disconnect', handleDisconnect);
     };
-  }, [peraWallet, onWalletChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [peraWallet]);
 
   /**
    * Connect to Pera Wallet

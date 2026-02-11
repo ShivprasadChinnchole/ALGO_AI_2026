@@ -18,6 +18,7 @@ const AttendancePanel = ({ walletAddress }) => {
     if (walletAddress) {
       fetchAttendanceStatus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
 
   /**
